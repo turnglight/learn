@@ -1,0 +1,20 @@
+# 深入理解Session和Cookie
+
+**Session**与**Cookie**的作用都是为了保持访问用户与后端服务器的交互状态。它们有各自的优点，也有各自的缺陷，然而具有讽刺意味的是它们的优点与它们的使用场景又是矛盾的。例如，使用Cookie来传递信息时，随着Cookie个数的增多和访问量的增加，它占用的网络宽带也很大，试想加入Cookie占用200个字节，如果一天PV有几亿，那么它们要占用多少宽带？所以有大访问量时希望用Session，但是Session的致命弱点是不容易在多台服务器之间共享，这也限制了Session的使用。
+
+## 理解Cookie
+
+HTTP是一种无状态协议，当用户的一次访问请求结束后，后端服务器就无法知道下一次来访问的还是上次访问的用户。
+
+### Cookie属性项
+
+当前Cookie有两个版本：**Version 0**和**Version 1**，它们有两种设置响应头的标识，分别是**“Set-Cookie”**。
+
+> **Version 0**属性介绍
+>
+> ![1562635412730](C:\Users\Dyn\AppData\Roaming\Typora\typora-user-images\1562635412730.png)
+
+> **Version 1属性介绍**
+>
+> ![1562635444817](C:\Users\Dyn\AppData\Roaming\Typora\typora-user-images\1562635444817.png)
+
