@@ -16,15 +16,11 @@
 
 ## **JVM**
 
-+ JVM内存模式
-+ JVM垃圾收集算法
-+ JVM垃圾收集器
-+ JVM参数
-+ JVM实践
++ [JVM](https://github.com/turnglight/learn/jvm/jvm.md)
 
 ## **数据库**
 
-+ 数据库的事务机制和锁
++ [数据库的事务机制和锁](https://github.com/turnglight/learn/database/数据库事务机制和锁.md)
 + 索引
 
 ## 框架
