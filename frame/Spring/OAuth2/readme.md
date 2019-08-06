@@ -45,14 +45,13 @@ Server mechanism, together with any @Beans that implement AuthorizationServerCon
 + `AuthorizationServerEndpointsConfigurer`: defines the authorization and token endpoints and the token services.
 ~~~java
 public class AuthorizationServerConfigurerAdapter implements AuthorizationServerConfigurer {
-    public AuthorizationServerConfigurerAdapter() {
-    }
-    public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-    }
-    public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-    }
-    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-    }
+    public AuthorizationServerConfigurerAdapter() {}
+    //配置AuthorizationServer安全认证的相关信息，创建ClientCredentialsTokenEndpointFilter核心过滤器
+    public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {}
+    //配置OAuth2的客户端相关信息
+    public void configure(ClientDetailsServiceConfigurer clients) throws Exception {}
+    //配置AuthorizationServerEndpointsConfigurer众多相关类，包括配置身份认证器，配置认证方式，TokenStore，TokenGranter，OAuth2RequestFactory
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {}
 }
 ~~~
 
