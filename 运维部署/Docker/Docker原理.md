@@ -53,8 +53,3 @@ command argument argument ..
 RUN echo "Hello Docker!"
 # RUN是Dockerfile内置命令，表示在镜像中执行后面的命令
 ~~~
-
-在Dockerfile中，可以使用的内置命令及其作用如表所示。
-
-![1562462713220](C:\Users\Dyn\AppData\Roaming\Typora\typora-user-images\1562462713220.png)
-
