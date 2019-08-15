@@ -5,13 +5,15 @@
 + 持续集成(CI)：持续编译、测试、打包；
 + 持续部署(CD)：代码在任何时刻都是可部署的，并且适配不同的环境自动部署
 
-+ ![avatar](https://box.kancloud.cn/2034b60a052b83ec55f7790e798fdf9d_609x480.png)
+<img src="https://box.kancloud.cn/2034b60a052b83ec55f7790e798fdf9d_609x480.png">
+
 ## 企业级CICD流水线
 >1.开发者提交代码到GitLab\
 >2.提交代码触发GitLab的WebHook，调用Jenkins构建\
 >3.Jenkins跑构建流程,将最终构建的镜像文件推送至Harbor镜像仓库\
 >4.通知K8s触发更新服务
-+ ![avatar](https://box.kancloud.cn/a63d8fc673a8d05787936944999c11d0_705x624.png)
+
+<img src="https://box.kancloud.cn/a63d8fc673a8d05787936944999c11d0_705x624.png">
 
 ## 技术点
 + git(可参考./Gitlab/Gitlab安装部署)
