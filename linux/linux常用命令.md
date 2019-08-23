@@ -7,10 +7,11 @@
 1、 查看cpu硬件配置
 
 ```
-less /proc/cpuinfo 
+less /proc/cpuinfo
 ```
 
-[![image](https://github.com/aalansehaiyang/technology-talk/raw/master/ops/img/4.png)](https://github.com/aalansehaiyang/technology-talk/blob/master/ops/img/4.png)
+<img src="https://github.com/aalansehaiyang/technology-talk/raw/master/ops/img/4.png">
+<img src="https://github.com/aalansehaiyang/technology-talk/blob/master/ops/img/4.png">
 
 ```
 uname -a                查看内核/操作系统/CPU信息
@@ -42,7 +43,7 @@ T：根据累计运行时间排序
 第四行：内存情况（buffers表示用作内核缓存的内存量）
 第五行：虚拟内存情况（系统的物理内存不够用的时候，把硬盘空间中的一部分空间释放出来，以供当前运行的程序使用）
 第六行：进程id，虚拟内存，驻留内存使用，cpu，内存使用百分比，运行时间,命令参数等。
-VIRT表示进程可以使用的内存总大小，VIRT=SWAP+RES，包括这个进程真实使用的内存, 映射过的文件, 和别的进程共享的内存等。 
+VIRT表示进程可以使用的内存总大小，VIRT=SWAP+RES，包括这个进程真实使用的内存, 映射过的文件, 和别的进程共享的内存等。
 RES表示这个进程真实占用内存的大小，一般这个值和JVM的参数配置有关，如果%MEM使用过高则需要关注
 SHR表示可以和别的进程共享的内存和库大小。
 ```
@@ -87,7 +88,7 @@ pstree -p {pid} | wc -l
 - pstack （显示每个进程的栈跟踪），也可以查看一个进程下的线程总数
 
 ```
-pstack {pid} 
+pstack {pid}
 // 输出第一行
 pstack {pid} | head -1
 ```
@@ -348,7 +349,7 @@ iostat -k 3
 
 ```
 // 查看sys.log文件被哪个进程打开
-lsof sys.log 
+lsof sys.log
 ```
 
 [![image](https://github.com/aalansehaiyang/technology-talk/raw/master/ops/img/8.png)](https://github.com/aalansehaiyang/technology-talk/blob/master/ops/img/8.png)
@@ -384,7 +385,7 @@ du -hl
 [![image](https://github.com/aalansehaiyang/technology-talk/raw/master/ops/img/11.png)](https://github.com/aalansehaiyang/technology-talk/blob/master/ops/img/11.png)
 
 ```
-du -sch * 
+du -sch *
 当前目录下的各目录的大小
 ```
 

@@ -9,12 +9,3 @@ HTTP是一种无状态协议，当用户的一次访问请求结束后，后端�
 ### Cookie属性项
 
 当前Cookie有两个版本：**Version 0**和**Version 1**，它们有两种设置响应头的标识，分别是**“Set-Cookie”**。
-
-> **Version 0**属性介绍
->
-> ![1562635412730](C:\Users\Dyn\AppData\Roaming\Typora\typora-user-images\1562635412730.png)
-
-> **Version 1属性介绍**
->
-> ![1562635444817](C:\Users\Dyn\AppData\Roaming\Typora\typora-user-images\1562635444817.png)
-
