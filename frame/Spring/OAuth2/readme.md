@@ -24,7 +24,18 @@
 
 
 ## 配置资源服务器
+~~~java
+public class ResourceServerConfigurerAdapter implements ResourceServerConfigurer {
+    public ResourceServerConfigurerAdapter() {
+    }
 
+    public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
+    }
+
+    public void configure(HttpSecurity http) throws Exception {
+    }
+}
+~~~
 ## 配置认证服务器
 ~~~java
 @Configuration
@@ -56,3 +67,108 @@ public class AuthorizationServerConfigurerAdapter implements AuthorizationServer
 ~~~
 
 ### 配置Spring Security
+
+
+### 自定义认证失败响应结果
+
+~~~java
+@Configuration
+@EnableResourceServer
+class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
+  @Override
+    public void configure(ResourceServerSecurityConfigurer resources) {
+        resources
+            .resourceId(AuthorizationServerConfiguration.RESOURCE_ID)
+            .stateless(true)
+            //自定义认证异常
+            .authenticationEntryPoint(new AuthExceptionEntryPoint())
+            //自定义拒绝访问
+            .accessDeniedHandler(new CustomAccessDeniedHandler());
+    }
+}
+~~~
+
+~~~java
+package cloud.zuul.server.oauth2;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
+import org.springframework.security.web.AuthenticationEntryPoint;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+public class AuthExceptionEntryPoint implements AuthenticationEntryPoint
+{
+
+    @Override
+    public void commence(HttpServletRequest request, HttpServletResponse response,
+                         AuthenticationException authException) throws ServletException {
+        Map<String, Object> map = new HashMap<String, Object>();
+        Throwable cause = authException.getCause();
+        if(cause instanceof InvalidTokenException) {
+            map.put("code", 401);//401
+            map.put("msg", "无效的token");
+        }else{
+            map.put("code", 401);//401
+            map.put("msg", "访问此资源需要完全的身份验证");
+        }
+        map.put("data", authException.getMessage());
+        map.put("success", false);
+        map.put("path", request.getServletPath());
+        map.put("timestamp", String.valueOf(new Date().getTime()));
+        response.setContentType("application/json");
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.writeValue(response.getOutputStream(), map);
+        } catch (Exception e) {
+            throw new ServletException();
+        }
+    }
+}
+~~~
+
+~~~java
+package cloud.zuul.server.oauth2;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.stereotype.Component;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+@Component("customAccessDeniedHandler")
+public class CustomAccessDeniedHandler implements AccessDeniedHandler {
+
+    @Override
+    public void handle(HttpServletRequest request, HttpServletResponse response,
+                       AccessDeniedException accessDeniedException)
+            throws IOException, ServletException {
+        response.setContentType("application/json;charset=UTF-8");
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("code", 401);//401
+        map.put("msg", "权限不足");
+        map.put("data", accessDeniedException.getMessage());
+        map.put("success", false);
+        map.put("path", request.getServletPath());
+        map.put("timestamp", String.valueOf(new Date().getTime()));
+        ObjectMapper mapper = new ObjectMapper();
+        response.setContentType("application/json");
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.getWriter().write(mapper.writeValueAsString(map));
+    }
+}
+
