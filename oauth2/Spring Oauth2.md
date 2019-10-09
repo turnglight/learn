@@ -5,6 +5,8 @@
 ## 核心概念[（理解Oauth2规范）](http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html)
 + 资源服务器
 + 认证服务器
++ 资源拥有者
++ 客户端
 + Security安全配置
 
 
