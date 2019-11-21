@@ -40,3 +40,9 @@
 > 如果客户端与服务器的编码不一致，就会出现乱码
 + 设置环境变量NLS_LANG,将NLS_LANG=(服务器的编码)
 + 重启PLSQL
+
+
+# 客户端日期格式设置
++ 添加环境变量
+    + nls_date_format=YYYY-MM-DD HH24:MI:SS
+    + nls_timestamp_format=YYYY-MM-DD HH24:MI:SS
