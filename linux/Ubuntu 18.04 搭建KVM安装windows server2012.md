@@ -78,6 +78,7 @@
 + 下载vnc客户端，在windows中通过vnc登录windows的系统图新界面，其中要指定端口和密码
 + 创建虚拟机磁盘空间： qemu-img create -f qcow2 -o preallocation=metadata /opt/windows_server_2012.raw 200G
 
+#### Bridge桥接模式
 > virt-install \
 > --name=windows_server_2012 \
 > --ram 8096 --vcpus=16\
@@ -86,6 +87,21 @@
 > --graphics vnc,listen=0.0.0.0,port=5921,password=123456 \
 > --network bridge=bro,model=virtio --hvm --virt-type kvm  \
 > --force --autostart
++ 5921是vnc连接虚拟机的端口
+
+#### Nat模式
++ 在内网环境中，通常IP是有限的，虚拟机与宿主机共用一个IP地址，这是需要以NAT的网络连接模式安装虚拟机,设置network=default，因为默认模式就是NAT
+> virt-install \
+> --name=windows_server_2012 \
+> --ram 8096 --vcpus=16 \
+> --disk path=/opt/windows_server_2012.raw,bus=virtio \
+> --cdrom /home/gly/cn_windows_server_2012_r2_x64_virtio.iso  \
+> --graphics vnc,listen=0.0.0.0,port=5921,password=123456 \
+> --network network=default,model=virtio --hvm --virt-type kvm  \
+> --force --autostart
++ 此时，宿主机的有一个虚拟网卡，IP地址为192.168.122.1, 通过VNC客户端进入虚拟机，windows虚拟机的IP地址为，192.168.122.X，虚拟机可以直接ping通宿主机的主机IP，而宿主机不能ping通虚拟机的IP，此时需要关闭虚拟机的防火墙，就可以通了。
++ 网络通了之后
+
 
 
 ### 常用命令
