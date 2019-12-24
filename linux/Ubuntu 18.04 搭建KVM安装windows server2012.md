@@ -9,7 +9,7 @@
 
 + 在egrep命令下面执行以验证您的系统是否支持硬件虚拟化\
 > egrep -c '(vmx|svm)' /proc/cpuinfo\
-> sudo apt install cpu-checker\
+> sudo apt install cpu-checker
 + 使用以下命令安装“ kvm-ok ”实用程序，该实用程序用于确定您的服务器是否能够运行硬件加速的KVM虚拟机\
 > sudo kvm-ok\
 
