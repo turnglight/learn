@@ -51,3 +51,17 @@ discovery.zen.ping.unicast.hosts: ["你服务器的IP地址"]
     + ./elasticsearch -d
     + ps -ef | grep elasticsearch
     + curl http://localhost:9200
+
+# 遇到的问题
+~~~
+could not find java; set JAVA_HOME or ensure java is in PATH
+
+无法识别JAVA_HOME环境变量
+解决办法：修改/etc/profile中的JAVA_HOME环境变量，不要在PATH变量中用$JAVA_HOME，修改如下：
+
+export JAVA_HOME=/usr/java/jdk1.8.0_131/
+export JRE_HOME=/usr/java/jdk1.8.0_131/jre
+export CLASSPATH=.:/usr/java/jdk1.8.0_131/lib:/usr/java/jdk1.8.0_131/jre/lib:$CLASSPATH
+export PATH=/usr/java/jdk1.8.0_131/bin:/usr/java/jdk1.8.0_131/jre/bin:$PATH
+
+~~~
