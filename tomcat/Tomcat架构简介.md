@@ -1,6 +1,47 @@
 # Tomcat
+> servlet容器，其内部实现了servlet规范。当前的web应用主要是基于http协议进行的用户-浏览器-服务器之间的交互模式。
+~~~java
+class Tomcat{
+    Connector connector;//处理请求--Request-> RequestFacade -> Servlet.service(HttpServletRequest)
+    List<Servlet> servlets;
+}
+~~~
 
-+ 当前的web应用主要是基于http协议进行的用户-浏览器-服务器之间的交互模式。
+
+> 我们经常说tomcat是一个servlet容器，那么它到底是如何运行的呢?
++ 在servlet中有一个核心方法service(Request, Response),主要由它来处理请求，这个方法是由谁来执行的？
+    + tomcat内部调用doGet方法
+    + 在以war包部署项目时，tomcat会读取class文件中的所有请求路径，在tomcat接收到请求后，根据路径来匹配tomcat存在的路径，并开始生成HttpServletRequest对象，并调用doGet传入HttpServletRequest参数
+
+> 部署方式,为什么可以部署war包，而不能部署jar包？
++ 在webapps下面部署war包，其核心部分就是class文件以及web.xml文件。在servlet3.1规范中，可以通过注解的方式去除web.xml文件，注解为@WebServlet。
++ 同样可以部署文件夹，只是war包是压缩的，文件夹是解压的
++ 还以在配置文件中配置<Context path="*" docBase="*"/>,提供项目所在路径，其实与war部署一样
++ jar包方式部署，tomcat无法确定是依赖包，还是web项目包，所以干脆用war包
+
+>那么接下来，就来理解何为容器？
++ http://localhost:8080/demo/helloWorld,这个请求路径能够映射出host,context,servlet
+    + host: http://localhost:8080
+    + context: demo
+    + servlet: helloWorld
++ 容器结构为：Engine->Host->Context->Servlet,Engine是为了项目的集群部署需要的容器属性
++ 而最终的容器结构为：Engine->Host->Context->Wrapper->Servlet,Wrapper是为了实现Servlet的并发访问衍生出来了的，一个Wrapper对应一个Servlet类，每一个Wrapper下有一个List<Servlet>集合。
+
+~~~java
+Engine:
+    Pipeline    -> 管道valve定义管道属性
+    List<Host> hosts;
+Host:
+    Pipeline
+    List<Context> contexts;
+Context:
+    Pipeline
+    List<Wrapper> wrappers;
+Wrapper:
+    Pipeline    ->最后一个管道阀门
+    List<Servlet>   servlets;
+~~~
+> 当接收到请求之后，从Engine开始，经过管道处理到host到context到wrapper的最后一个管道阀门，然后将请求交给Servlet。
 
 ## Http协议
 ### Http请求

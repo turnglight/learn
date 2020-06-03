@@ -125,5 +125,3 @@ services:
 ## 3.安装镜像
 > 将复制的镜像文件拷贝到本地
 + docker load -i nginx.tar
-
->>>>>>> 341e99322247a71e31c1caed59d82b466722ddbd

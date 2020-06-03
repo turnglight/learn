@@ -1,4 +1,13 @@
-# IO
+# I/O类库的基本架构
+
++ 基于字节操作的I/O接口：InputStream和OutputStream
++ 基于字符操作的I/O接口：Writer和Reader
++ 基于磁盘操作的I/O接口：File
++ 基于网络操作的I/O接口：Socket
+
+> 前两组主要是基于数据的传输格式，后两组主要是基于数据的传输方式
+
+## Java Socket工作机制
 
 
 
