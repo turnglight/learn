@@ -170,6 +170,12 @@ a.call(undefined) // 123
 a.call(window) // 123
 a.call(obj) // 456
 ~~~
+
+
 + Function.prototype.apply()
+~~~javascript
+
+~~~
+
 + Function.prototype.bind()
 
