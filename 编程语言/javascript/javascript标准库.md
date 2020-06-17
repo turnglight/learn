@@ -79,3 +79,14 @@ String.fromCharCode(104, 101, 108, 108, 111)
 + String.prototype.search(), String.prototype.replace()
 + String.prototype.split()：给分隔符，对字符串进行分隔，返回一个由分割出来的字符串组成的数组
 + String.prototype.localeCompare()：字符串比较
+
+
+## Math
+
+## Date
+
+## RegExp
+
+## JSON
++ JSON.stringify()
++ JSON.parse()
