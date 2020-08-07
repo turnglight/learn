@@ -16,9 +16,9 @@ dequeue current thread if it was queued; And a release operation is:
         unblock one or more queued threads; 
 ~~~
 Support for these operations requires the coordination of three basic components: 
-• Atomically managing synchronization state 
-• Blocking and unblocking threads 
-• Maintaining queues
++ Atomically managing synchronization state 
++ Blocking and unblocking threads 
++ Maintaining queues
 
 
 伪码分析：
