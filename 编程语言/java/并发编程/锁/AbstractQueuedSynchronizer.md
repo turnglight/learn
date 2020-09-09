@@ -1,4 +1,6 @@
 # AbstractQueuedSynchronizer
+## 什么是AQS？
+> 以下是我自己的一些理解，AQS是一个基于自旋的基于队列管理的基于状态量队列同步器。首先，它的同步方式是不断地自旋，其内部实现为for(;;)结构，不断循环；其次，线程同步的资源是通过一个state状态量进行控制，state=0为表示当前资源为自由状态，当state>0表示资源已经被加锁，state的更新需要保证它的原子性；最后，当线程无法获取资源时，它会自己调用LockSupport.park()对当前线程进行阻塞，并将当前线程加入到队列中;直到同步资源被释放，由释放资源的线程获取队列的头部节点中的线程，调用unpark唤醒下一个想要获取子资源的线程。
 
 >作者Doug Lea写了一篇论文`The java.util.concurrent Synchronizer Framework`，重点在第三章`Design and implementation`中提出了并发组件三个基本组成部分，原文如下
 
@@ -22,7 +24,7 @@ Support for these operations requires the coordination of three basic components
 
 
 伪码分析：
-+ 当同步状态量不允许获取时，也就是源码中的state>0，那么将线程入队，并调用park阻塞该线程，这里是一个死循环
++ 当同步状态量不允许获取时，也就是源码中的state>0，那么将线程入队，并调用park阻塞该线程，这里是一个死循环，也就是自旋阻塞，然后等待unpark唤醒
 + 当同步状态量处于自由状态了，允许被阻塞中的线程加锁了，那么调用unpark方法唤醒阻塞中的线程，也就是unblock thread
 > 要想支持这两步操作，需要三个基本组件
 我们主要来分析这三点
@@ -63,7 +65,7 @@ public abstract class AbstractQueuedSynchronizer
 ~~~
 
 ## Atomically manaing synchronization state
-> 如何保证同步器状态state的线程安全，实际上也就是我们在JMM模型中的三个问题，可见性/有序性/原子性。源码中state为volatile，volatile本身解决了变量的可见性和有序性，同时源码中state的set方法是CAS提供的是原子性操作，那么也就解决了state的线程安全问题。
+> 如何保证同步器状态state的线程安全，实际上也就是我们在JMM模型中的三个问题，可见性/有序性/原子性。源码中state为volatile，volatile本身解决了变量的可见性和有序性，同时源码中state的set方法是CAS提供的是原子性操作，那么也就解决了state的线程安全问题（这一段不理解，可以阅读另一篇文档，并发编程原理中的线程安全三大核心问题）。
 + private volatile int state;
 + protected final boolean compareAndSetState(int expect, int update){...}
 
@@ -129,7 +131,7 @@ protected final boolean tryAcquire(int acquires) {
     + 当值为0值，表示当前锁为自由状态
         + 先检查是否有在排队等待的线程
             + 如果AQS队列中没有排队的节点，则可以进行加锁操作
-            + 如果有排队中的节点，则返回false，有人排队，那么你也需要排队，所以获取锁失败，这里就是公平与非公平的区别所在。
+            + 如果有排队中的节点，则返回false，有人排队，那么你也需要排队，所以获取锁失败，这里就是公平与非公平的区别所在；非公平锁就是在资源被释放的瞬间，有一个线程刚好来请求资源，这个时候它没有入队，而是直接获取资源，它并不是一开始就执行入队操作。
     + 当值>0时，表示当前锁已经被持有
         + 如果持有该锁的当前线程，则说明当前线程想最次获取锁，这里就是重入锁的体现，当前线程再次获取锁，直接将state+1即可
         + 如果不是当前线程，则直接返回false，因为当前锁还没有释放，或者获取锁失败
@@ -165,7 +167,7 @@ public final boolean hasQueuedPredecessors() {
         + 当第一个节点是自己, s.thread != Thread.currentThread()-->false, 所以true && (false || false)，整体返回false
         + 当第一个节点不是自己, s.thread != Thread.currentThread()-->true, 所以true && (false || true)，整体返回true
     + 当队列中的节点=1, head=tail=node,那么h!=t--> false, 整体直接返回false
-> 这段逻辑特别不容易理解，特别是最后一种情况，当对象只是最后一个排队者时，需要清楚，head和tail分别指向的是什么，因为我们必须要了解，队列在整个加锁和解锁的过程中，他们内部节点是如何变化的，也就是head和tail的关联操作时什么实现的。这里建议画一张双向链表图，然后根据代码一步一步的分析。主要位置就是release方法，调用了unpark方式，并且
+> 这段逻辑特别不容易理解，特别是最后一种情况，当对象只是最后一个排队者时，需要清楚，head和tail分别指向的是什么，因为我们必须要了解，队列在整个加锁和解锁的过程中，他们内部节点是如何变化的，也就是head和tail的关联操作时什么实现的。这里建议画一张双向链表图，然后根据代码一步一步的分析。主要位置就是release方法，调用了unpark方法。
 
 #### acquireQueued(addWaiter(Node.EXCLUSIVE), arg))
 ~~~java
@@ -311,4 +313,4 @@ private final boolean parkAndCheckInterrupt() {
 }
 ~~~
 
-
+综上源代码，其内部实现时围绕三点进行的，也就是资源状态量的维护/队列的维护/线程的park和unpark。资源状态量state>0，则入队并park；当资源被释放，释放资源的线程调用自己的下一个节点中的线程执行unpark，再次对队列进行维护，并更新状态量，依次不断的循环维护，是AQS的原理本质。
