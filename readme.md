@@ -44,4 +44,3 @@
 + docker-compose
 + docker-swarm
 
-### **Jenkins**
