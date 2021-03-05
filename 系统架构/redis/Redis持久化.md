@@ -1,8 +1,9 @@
 
 Redis提供了两种不同的持久化方式
-+ RDB
++ RDB(SNAPSHOTTING:Redis DataBase)
+    + 
     + 在指定的时间间隔能对你的数据进行快照存储
-+ AOF
++ AOF(append only file)
     + 对redis的写操作会被AOF文件记录，当服务器重启时，会重新执行这些命令来恢复原始的数据
 
 # RDB
@@ -10,10 +11,10 @@ Redis提供了两种不同的持久化方式
 ## 三种触发机制
 + save
     + 阻塞型触发方式，当执行save命令期间，主进程不能处理命令，直到rdb过程结束，相当于JVM在垃圾回收时的stop the world
-+ bgsave
++ bgsave(save m n)
     + 非阻塞的异步触发方式，当执行bgsave命令期间，主进程依然能继续处理其它命令，它只在fork子进程时，进行短暂的暂停，时间很短。
     + 基本上Redis内部所有的RDB都采用bgsave命令
-+ 自动触发
++ 自动触发bgsave
     + 通过在redis.conf中进行配置
 
 ## RDB优点
@@ -47,3 +48,24 @@ Redis提供了两种不同的持久化方式
 
 
 > 通常两者加在一起使用较好
+
+
+
+## 常用配置
+RDB持久化配置
+Redis会将数据集的快照dump到dump.rdb文件中。此外，我们也可以通过配置文件来修改Redis服务器dump快照的频率，在打开6379.conf文件之后，我们搜索save，可以看到下面的配置信息：
+
+save 900 1              #在900秒(15分钟)之后，如果至少有1个key发生变化，则dump内存快照。
+
+save 300 10            #在300秒(5分钟)之后，如果至少有10个key发生变化，则dump内存快照。
+
+save 60 10000        #在60秒(1分钟)之后，如果至少有10000个key发生变化，则dump内存快照。
+
+AOF持久化配置
+在Redis的配置文件中存在三种同步方式，它们分别是：
+
+appendfsync always     #每次有数据修改发生时都会写入AOF文件。
+
+appendfsync everysec  #每秒钟同步一次，该策略为AOF的缺省策略。
+
+appendfsync no          #从不同步。高效但是数据不会被持久化。

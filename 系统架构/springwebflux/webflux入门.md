@@ -2,13 +2,12 @@
 
 # spring webmvc & spring webflux
 ## springwebmvc
-+ servlet容器
-+ 同步非阻塞
++ servletapi和servlet容器
+
 
 ## springwebflux
-+ netty
-+ 异步非阻塞
-
++ Reactive Streams API和Servlet 3.1+
++ Mono和Flux
 
 
 
