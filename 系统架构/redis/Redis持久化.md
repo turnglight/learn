@@ -29,12 +29,31 @@ Redis提供了两种不同的持久化方式
 # AOF
 
 ## 三种触发机制
++ 手动触发：bgrewriteaof
++ 自动触发：通过设置下面两个参数来设置
+    + auto-aof-rewrite-percentage:代表当前AOF文件空间
+    + auto-aof-rewrite-min-size:AOF重写的文件最小体积
+
+
+## 文件同步的三种策略
 + always
     + 每一个命令更新都触发一次数据变更日志的磁盘同步，性能较差，数据完整性较好
 + everysec
     + 每一秒触发一次数据变更日志的磁盘同步，异步操作。如果在一秒内系统宕机，这一秒内的数据被丢失
 + no
     + 从不同步，不可控
+
+## 开启AOF
+> appendonly yes
+> 默认AOF不开启，默认文件名为appendonly.aof
+
+工作流程如下：
++ 命令写入(append)
+    + 命令的写入并非直接写入到硬盘，而是先append到aof_buffer缓冲区，这样响应命令的性能就可以不用依赖与硬盘的读写
++ 文件同步(fsync)
+    + 
++ 文件重写
++ 重新加载
 
 ## AOF优点
 + 数据完整性较RDB更好
