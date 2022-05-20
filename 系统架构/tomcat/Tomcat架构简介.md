@@ -104,7 +104,7 @@ Welcome to Brainy Software
 > 
 > Tomcat设计了两个核心组件：连接器（Connector）和容器（Container）,Connector负责外部的网络请求，\
 > Container服务内部的请求转发。\
-><img src="http://p1.pstatp.com/large/pgc-image/e907a8ce9f774d0aac6f1dcda9baf6a6">
+
 
 连接器与容器的内容可以参考， <a href="https://www.toutiao.com/a6701177258800841219/">连接器与容器详解</a>
 

@@ -18,7 +18,7 @@ su root
 apt updated
 apt install nginx
 systemctl status nginx
-~~~
+~~~ 
 > 通过`systemctl status nginx`命令查看启动状态，安装成功后。进行验证。通过浏览器访问服务器地址会出现Nginx的欢迎页面。
 
 ## Nginx的配置
